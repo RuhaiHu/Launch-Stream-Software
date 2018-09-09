@@ -44,6 +44,11 @@
     Updated environmental paramaters to use Powershell Params instead of Command Line since they were not working.
     Fix Logic that just wasn't working.
 
+  Possible Changes / Ideas:
+    Turn code chunks for stopping / starting programs in to functions/modules
+    Change powerplan code so its looking at the id's of the plans and not names?
+    Config file? For enable disable of stopping starting?
+
 .EXAMPLE
   None
 #>
@@ -67,6 +72,8 @@ else{
 }
 
 # Set powerplan to High Performance Plan while streaming if not already
+# Found on https://facility9.com/2015/07/controlling-the-windows-power-plan-with-powershell/
+# Also found on other sites
 Try {
   $HighPerf = powercfg -l | %{if($_.contains("High performance")) {$_.split()[3]}}
   $CurrPlan = $(powercfg -getactivescheme).split()[3]
@@ -169,6 +176,8 @@ do{
 # Created the daily as a clone of my balance performance settings
 # Because I couldn't get it to recognize just the balance plan
 # Set power plan back to balanced/daily regular usage plan
+# Found on https://facility9.com/2015/07/controlling-the-windows-power-plan-with-powershell/
+# Also found on other sites
 Try {
   $DailyPerf = powercfg -l | %{if($_.contains("Daily")) {$_.split()[3]}}
   $CurrPlan = $(powercfg -getactivescheme).split()[3]
