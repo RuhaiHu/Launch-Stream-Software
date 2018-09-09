@@ -16,4 +16,10 @@ Follow this guide if you need help : https://www.tenforums.com/tutorials/97162-p
 Using this in the Target field of the shortcut:
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -WindowStyle Hidden -ExecutionPolicy Bypass -File "PATH TO SCRIPT\stream_launch.ps1"
 
-I also grabed a nice ICON for the shortcut and applied that.
+I also grabbed a nice ICON for the shortcut and applied that.
+
+
+Possible Changes / Ideas:
+    Turn code chunks for stopping / starting programs in to functions/modules
+    Change power plan code so its looking at the id's of the plans and not names?
+    Config file? For enable disable of stopping starting?
