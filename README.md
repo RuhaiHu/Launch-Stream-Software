@@ -18,7 +18,6 @@ Using this in the Target field of the shortcut:
 
 I also grabbed a nice ICON for the shortcut and applied that.
 
-
 Possible Changes / Ideas:
     Turn code chunks for stopping / starting programs in to functions/modules
     Change power plan code so its looking at the id's of the plans and not names?
