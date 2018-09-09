@@ -35,7 +35,7 @@
   Creation Date:  2018.09.06
 
   Last Modified by: Ruhai Hu
-  Last Modifcation Date: 2018.09.08
+  Last Modifcation Date: 2018.09.09
 
   Purpose/Change: 
     Initial script development
@@ -43,6 +43,7 @@
     Update Comments and Descriptions
     Updated environmental paramaters to use Powershell Params instead of Command Line since they were not working.
     Fix Logic that just wasn't working.
+    Prevented some more extra output that wasn't desired
 
   Possible Changes / Ideas:
     Turn code chunks for stopping / starting programs in to functions/modules
@@ -87,7 +88,7 @@ Try {
 
 # Check then Launch Hexchat
 if(!(Get-Process -Name 'hexchat')){
-  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat"
+  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat"  -redirectstandardoutput null
   if(Get-Process -Name 'hexchat'){
   Write-Output "HexChat Started!"}
 }
@@ -111,12 +112,12 @@ else{
 }
 
 # Check then Launch Chatbot
-if(!(Get-Process -Name 'Streamlabs*')){
-  Start-Process -FilePath "$env:APPDATA\Streamlabs\Streamlabs Chatbot\Streamlabs Chatbot.exe" -WorkingDirectory "$env:APPDATA\Streamlabs\Streamlabs Chatbot"
-  if(Get-Process -Name 'Streamlabs*'){
+if(!(Get-Process -Name 'Streamlabs*Chatbot*')){
+  Start-Process -FilePath "$env:APPDATA\Streamlabs\Streamlabs Chatbot\Streamlabs Chatbot.exe" -WorkingDirectory "$env:APPDATA\Streamlabs\Streamlabs Chatbot" -Verb runAs
+  if(Get-Process -Name 'Streamlabs Chatbot'){
   Write-Output "StreamLabs Chatbot Started!"}
 }
-elseif(Get-Process -Name 'Streamlabs*'){
+elseif(Get-Process -Name 'Streamlabs Chatbot'){
   Write-Output "StreamLabs Chatbot already running!"}
 else{
   Write-Error "StreamLabs Chatbot Failed to Start!"
@@ -124,7 +125,8 @@ else{
 
 # Check then Launch Pretzel
 if(!(Get-Process -Name 'pretzel')){
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop"
+  # Seems Pretzel also outputs some extra stuff that I don't want to see on the output
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" -redirectstandardoutput null
   if(Get-Process -Name 'pretzel'){
   Write-Output "Pretzel Started"}
 }
@@ -135,7 +137,7 @@ else{
 }
 
 # Check for and then launch OBS
-if(!(Get-Process -Name 'obs64')){
+if(!(Get-Process -Name 'obs*')){
   Start-Process -FilePath "C:\Program Files (x86)\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files (x86)\obs-studio\bin\64bit" -Verb runAs
   if(Get-Process -Name 'obs64'){
   Write-Output "OBS Started"}
@@ -157,7 +159,7 @@ do{
   `n Sleeping for 2 minutes.
   `n Before relaunching closed programs.
   `n Sleep will repeat until programs close."
-  Start-Sleep -seconds 10
+  Start-Sleep -seconds 120
 
   # Determine if processes are running and add them to count
   # So we can determine if we want to continue to wait
