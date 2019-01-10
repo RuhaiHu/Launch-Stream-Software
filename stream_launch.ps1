@@ -72,12 +72,12 @@ else{
   Write-Output "Google Drive Not running!"
 }
 
-if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Running"}){
-  Stop-Service -Name 'synergy'
+<# if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Running"}){
+  Get-Service -Name 'synergy' | Stop-Service
 }
 else{
   Write-Output "Synergy Not running!"
-}
+} #>
 
 if(Get-Process -Name 'VirtuaWin'){
   Stop-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
@@ -212,9 +212,9 @@ if(!(Get-Process -Name 'googledrivesync')){
   Start-Process -FilePath "C:\Program Files\Google\Drive\googledrivesync.exe" -WorkingDirectory "C:\Program Files\Google\Drive\"
 }
 
-if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Stopped"}){
+<# if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Stopped"}){
   Start-Service -Name 'synergy'
-}
+} #>
 
 if(!(Get-Process -Name 'VirtuaWin')){
   Start-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
