@@ -72,6 +72,21 @@ else{
   Write-Output "Google Drive Not running!"
 }
 
+if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Running"}){
+  Stop-Service -Name 'synergy'
+}
+else{
+  Write-Output "Synergy Not running!"
+}
+
+if(Get-Process -Name 'VirtuaWin'){
+  Stop-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
+}
+else{
+  Write-Output "VirtuaWin Not running!"
+}
+
+
 # Set powerplan to High Performance Plan while streaming if not already
 # Found on https://facility9.com/2015/07/controlling-the-windows-power-plan-with-powershell/
 # Also found on other sites
@@ -192,6 +207,17 @@ Try {
 if(!(Get-Process -Name 'dropbox')){
   Start-Process -FilePath "C:\Program Files (x86)\Dropbox\Client\Dropbox.exe" -WorkingDirectory "C:\Program Files (x86)\Dropbox\Client"
 }
+
 if(!(Get-Process -Name 'googledrivesync')){
   Start-Process -FilePath "C:\Program Files\Google\Drive\googledrivesync.exe" -WorkingDirectory "C:\Program Files\Google\Drive\"
 }
+
+if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Stopped"}){
+  Start-Service -Name 'synergy'
+}
+
+if(!(Get-Process -Name 'VirtuaWin')){
+  Start-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
+}
+
+VirtuaWin

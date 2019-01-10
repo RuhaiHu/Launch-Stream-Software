@@ -1,0 +1,33 @@
+
+Checking for update
+[19:29:15.403] [info] [ { accelerator: 'Shift+Alt+P',
+    payload: { action: 'togglePause' } },
+  { accelerator: 'Shift+Alt+]', payload: { action: 'next' } },
+  { accelerator: 'Shift+Alt+=',
+    payload: { action: 'increaseVolume' } },
+  { accelerator: 'Shift+Alt+-',
+    payload: { action: 'decreaseVolume' } },
+  { accelerator: 'Shift+Alt+;',
+    payload: { action: 'setVolume', value: 0.13 } },
+  { accelerator: 'Shift+Alt+\'',
+    payload: { action: 'setVolume', value: 0.71 } } ]
+[19:29:15.407] [info] 6 keybinds successfully bound.
+[19:29:15.407] [info] Media keys bound: true
+Update for version 0.0.19 is not available (latest version: 0.0.19, downgrade is disallowed).
+Checking for update
+Update for version 0.0.19 is not available (latest version: 0.0.19, downgrade is disallowed).
+[22:29:26.402] [info] [ { accelerator: 'Shift+Alt+P',
+    payload: { action: 'togglePause' } },
+  { accelerator: 'Shift+Alt+]', payload: { action: 'next' } },
+  { accelerator: 'Shift+Alt+=',
+    payload: { action: 'increaseVolume' } },
+  { accelerator: 'Shift+Alt+-',
+    payload: { action: 'decreaseVolume' } },
+  { accelerator: 'Shift+Alt+;',
+    payload: { action: 'setVolume', value: 0.13 } },
+  { accelerator: 'Shift+Alt+\'',
+    payload: { action: 'setVolume', value: 0.71 } } ]
+[22:29:26.403] [info] 6 keybinds successfully bound.
+[22:29:26.404] [info] Media keys bound: true
+Checking for update
+Update for version 0.0.19 is not available (latest version: 0.0.19, downgrade is disallowed).
