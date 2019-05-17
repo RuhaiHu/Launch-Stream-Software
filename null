@@ -1,6 +1,6 @@
 
 Checking for update
-[19:28:54.065] [info] [ { accelerator: 'Shift+Alt+P',
+[20:07:54.635] [info] [ { accelerator: 'Shift+Alt+P',
     payload: { action: 'togglePause' } },
   { accelerator: 'Shift+Alt+]', payload: { action: 'next' } },
   { accelerator: 'Shift+Alt+=',
@@ -11,29 +11,21 @@ Checking for update
     payload: { action: 'setVolume', value: 0.13 } },
   { accelerator: 'Shift+Alt+\'',
     payload: { action: 'setVolume', value: 0.71 } } ]
-[19:28:54.068] [info] 6 keybinds successfully bound.
-[19:28:54.068] [info] Media keys bound: true
+[20:07:54.638] [info] 6 keybinds successfully bound.
+[20:07:54.639] [info] Media keys bound: true
 Update for version 0.0.19 is not available (latest version: 0.0.19, downgrade is disallowed).
-  "provider": "generic",
-      "url": "https://s3-us-west-2.amazonaws.com/streamlabs-electron"
-    },
-    "baseUrl": {
-      "protocol": "https:",
-      "slashes": true,
-      "auth": null,
-      "host": "s3-us-west-2.amazonaws.com",
-      "port": null,
-      "hostname": "s3-us-west-2.amazonaws.com",
-      "hash": null,
-      "search": null,
-      "query": null,
-      "pathname": "/streamlabs-electron",
-      "path": "/streamlabs-electron",
-      "href": "https://s3-us-west-2.amazonaws.com/streamlabs-electron"
-    },
-    "channel": "latest"
-  }
-}
-[19:28:50:0790] [info] checking-for-update
-[19:28:50:0791] [info] checkforupdates
-[19:28:51:0107] [info] update-not-available
+Checking for update
+Update for version 0.0.19 is not available (latest version: 0.0.19, downgrade is disallowed).
+[22:13:22.250] [info] [ { accelerator: 'Shift+Alt+P',
+    payload: { action: 'togglePause' } },
+  { accelerator: 'Shift+Alt+]', payload: { action: 'next' } },
+  { accelerator: 'Shift+Alt+=',
+    payload: { action: 'increaseVolume' } },
+  { accelerator: 'Shift+Alt+-',
+    payload: { action: 'decreaseVolume' } },
+  { accelerator: 'Shift+Alt+;',
+    payload: { action: 'setVolume', value: 0.13 } },
+  { accelerator: 'Shift+Alt+\'',
+    payload: { action: 'setVolume', value: 0.71 } } ]
+[22:13:22.251] [info] 6 keybinds successfully bound.
+[22:13:22.252] [info] Media keys bound: true

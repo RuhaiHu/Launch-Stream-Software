@@ -103,7 +103,7 @@ Try {
 
 # Check then Launch Hexchat
 if(!(Get-Process -Name 'hexchat')){
-  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat"  -redirectstandardoutput null
+  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat"  | out-null
   if(Get-Process -Name 'hexchat'){
   Write-Output "HexChat Started!"}
 }
@@ -115,8 +115,8 @@ else{
 
 # Check then Launch Stream Labels
 if(!(Get-Process -Name 'streamlabels')){
-  # Annoyingly Stream Labs Labels outputs a bunch of connection information so sending it to null
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels" -redirectstandardoutput null
+  # Annoyingly Stream Labs Labels outputs a bunch of connection information so sending it to $null
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels" | out-null
   if(Get-Process -Name 'streamlabels'){
   Write-Output "StreamLabels Started!"}
 }
@@ -141,7 +141,7 @@ else{
 # Check then Launch Pretzel
 if(!(Get-Process -Name 'pretzel')){
   # Seems Pretzel also outputs some extra stuff that I don't want to see on the output
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" -redirectstandardoutput null
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop"  | out-null
   if(Get-Process -Name 'pretzel'){
   Write-Output "Pretzel Started"}
 }
@@ -196,9 +196,9 @@ do{
 # Found on https://facility9.com/2015/07/controlling-the-windows-power-plan-with-powershell/
 # Also found on other sites
 Try {
-  $DailyPerf = powercfg -l | %{if($_.contains("Daily")) {$_.split()[3]}}
+  $BalancePerf = powercfg -l | %{if($_.contains("Balanced")) {$_.split()[3]}}
   $CurrPlan = $(powercfg -getactivescheme).split()[3]
-  if ($CurrPlan -ne $DailyPerf) {powercfg -setactive $DailyPerf}
+  if ($CurrPlan -ne $BalancePerf) {powercfg -setactive $BalancePerf}
 } Catch {
   Write-Warning -Message "Unable to set power plan to Daily Performance"
 }
