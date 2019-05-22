@@ -103,7 +103,7 @@ Try {
 
 # Check then Launch Hexchat
 if(!(Get-Process -Name 'hexchat')){
-  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat"  | out-null
+  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat" >$null
   if(Get-Process -Name 'hexchat'){
   Write-Output "HexChat Started!"}
 }
@@ -116,7 +116,7 @@ else{
 # Check then Launch Stream Labels
 if(!(Get-Process -Name 'streamlabels')){
   # Annoyingly Stream Labs Labels outputs a bunch of connection information so sending it to $null
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels" | out-null
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels" >$null
   if(Get-Process -Name 'streamlabels'){
   Write-Output "StreamLabels Started!"}
 }
@@ -141,7 +141,18 @@ else{
 # Check then Launch Pretzel
 if(!(Get-Process -Name 'pretzel')){
   # Seems Pretzel also outputs some extra stuff that I don't want to see on the output
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop"  | out-null
+
+  # "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" >$null
+
+  # $pretzel = $env:LOCALAPPDATA + "\Programs\PretzelDesktop\Pretzel.exe"
+  # $pretzelWorkingDirectory = $env:LOCALAPPDATA + "\Programs\PretzelDesktop"
+  
+  
+  #   Start-Process -FilePath $pretzel -WorkingDirectory $pretzelWorkingDirectory *>$nul
+  # Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList "C:\Users\weber\AppData\Local\Programs\PretzelDesktop\Pretzel.exe" *>$null
+
+
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" >$null
   if(Get-Process -Name 'pretzel'){
   Write-Output "Pretzel Started"}
 }
