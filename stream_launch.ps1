@@ -53,9 +53,16 @@
 .EXAMPLE
   None
 #>
+Import-Module AudioDeviceCmdlets
 
 #Set Error Action to Silently Continue
 $ErrorActionPreference = "SilentlyContinue"
+
+# Write-Output "Setting Wireless Headphones as Default Audio Device"
+
+# $articsGame = Get-AudioDevice -List | Where-Object -Property Name -eq "Headphones (Arctis Pro Wireless Game)"
+# Set-AudioDevice -ID $articsGame.ID
+
 
 # Stop list of programs that cause issues
 # This should hopefully stop the processes gracefully
@@ -103,7 +110,7 @@ Try {
 
 # Check then Launch Hexchat
 if(!(Get-Process -Name 'hexchat')){
-  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat" >$null
+  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat" | Out-Null
   if(Get-Process -Name 'hexchat'){
   Write-Output "HexChat Started!"}
 }
@@ -116,7 +123,7 @@ else{
 # Check then Launch Stream Labels
 if(!(Get-Process -Name 'streamlabels')){
   # Annoyingly Stream Labs Labels outputs a bunch of connection information so sending it to $null
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels" >$null
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels" | Out-Null
   if(Get-Process -Name 'streamlabels'){
   Write-Output "StreamLabels Started!"}
 }
@@ -152,7 +159,7 @@ if(!(Get-Process -Name 'pretzel')){
   # Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList "C:\Users\weber\AppData\Local\Programs\PretzelDesktop\Pretzel.exe" *>$null
 
 
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" >$null
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" | Out-Null
   if(Get-Process -Name 'pretzel'){
   Write-Output "Pretzel Started"}
 }
@@ -164,7 +171,7 @@ else{
 
 # Check for and then launch OBS
 if(!(Get-Process -Name 'obs*')){
-  Start-Process -FilePath "C:\Program Files (x86)\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files (x86)\obs-studio\bin\64bit" -Verb runAs
+  Start-Process -FilePath "C:\Program Files\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files\obs-studio\bin\64bit" -Verb runAs
   if(Get-Process -Name 'obs64'){
   Write-Output "OBS Started"}
 }
