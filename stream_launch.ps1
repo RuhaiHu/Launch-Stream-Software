@@ -30,12 +30,12 @@
   None
 
 .NOTES
-  Version:        1.1
+  Version:        1.5
   Author:         Ruhai Hu
   Creation Date:  2018.09.06
 
   Last Modified by: Ruhai Hu
-  Last Modifcation Date: 2018.09.09
+  Last Modifcation Date: 2019.10.10
 
   Purpose/Change: 
     Initial script development
@@ -51,17 +51,21 @@
     Config file? For enable disable of stopping starting?
 
 
-    C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "D:\Google Drive\Twitch\Scripts\Launch-Stream-Software\stream_launch.ps1" -WindowStyle Minimized
+   C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle Minimized -ExecutionPolicy Bypass -File "D:\Google Drive\Twitch\Scripts\Launch-Stream-Software\stream_launch.ps1"
 
-    powershell.exe -ExecutionPolicy Bypass -File "D:\Google Drive\Twitch\Scripts\Launch-Stream-Software\stream_launch.ps1" -WindowStyle Minimized
+   FOR STREAM DECK
+    powershell.exe -WindowStyle Minimized -ExecutionPolicy Bypass -Command "Invoke-Item 'C:\\Users\\weber\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Launch Stream Software.lnk'" 
 
-    powershell.exe -ExecutionPolicy Bypass -Command "Invoke-Item 'C:\\Users\\weber\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Launch Stream Software.lnk'"
 
 .EXAMPLE
   None
 #>
 Import-Module AudioDeviceCmdlets
-read-host "wait 1second"
+
+
+# read-host "wait 1second"
+
+
 #Set Error Action to Silently Continue
 $ErrorActionPreference = "SilentlyContinue"
 
@@ -71,14 +75,14 @@ $ErrorActionPreference = "SilentlyContinue"
 # Set-AudioDevice -ID $articsGame.ID
 
 # Run the Restart Audio Script
-Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\Dropbox\Twitch\\VAC Setup\\restartaudiosetup.ps1"' 
+Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\Dropbox\Twitch\\VAC Setup\\restartaudiosetup.ps1"' -Verb RunAs
 
 # Read-Host "waiiiit!!!!"
 
 # Stop list of programs that cause issues
 # This should hopefully stop the processes gracefully
 # List of processes to kill
-$processes = "dropbox|googledrivesync|VirtuaWin"
+$processes = 'dropbox', 'googledrivesync', 'VirtuaWin'
 if(Get-Process -Name $processes){
   Get-Process -Name $processes | Stop-Process
 }
@@ -158,7 +162,7 @@ else{
 
 # Check then Launch Chatbot
 if(!(Get-Process -Name 'Streamlabs*Chatbot*')){
-  Start-Process -FilePath "$env:APPDATA\Streamlabs\Streamlabs Chatbot\Streamlabs Chatbot.exe" -WorkingDirectory "$env:APPDATA\Streamlabs\Streamlabs Chatbot" 
+  Start-Process -FilePath "$env:APPDATA\Streamlabs\Streamlabs Chatbot\Streamlabs Chatbot.exe" -WorkingDirectory "$env:APPDATA\Streamlabs\Streamlabs Chatbot" -Verb RunAs
   if(Get-Process -Name 'Streamlabs Chatbot'){
   Write-Output "StreamLabs Chatbot Started!"}
 }
@@ -194,7 +198,7 @@ else{
 
 # Check for and then launch OBS
 if(!(Get-Process -Name 'obs*')){
-  Start-Process -FilePath "C:\Program Files\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files\obs-studio\bin\64bit" 
+  Start-Process -FilePath "C:\Program Files\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files\obs-studio\bin\64bit" -Verb RunAs
   if(Get-Process -Name 'obs64'){
   Write-Output "OBS Started"}
 }
@@ -207,7 +211,9 @@ else{
 # While needed stoftware for streaming running
 # reason for doing this is I might be restarting OBS for some reason
 # Personaly excluding Pretzel
+Start-Sleep -seconds 10
 do{
+  Clear-Host
   $running = 0
   # If the check programs are still running 
   # sleep for 2 minutes
