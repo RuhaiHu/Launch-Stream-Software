@@ -50,11 +50,18 @@
     Change powerplan code so its looking at the id's of the plans and not names?
     Config file? For enable disable of stopping starting?
 
+
+    C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "D:\Google Drive\Twitch\Scripts\Launch-Stream-Software\stream_launch.ps1" -WindowStyle Minimized
+
+    powershell.exe -ExecutionPolicy Bypass -File "D:\Google Drive\Twitch\Scripts\Launch-Stream-Software\stream_launch.ps1" -WindowStyle Minimized
+
+    powershell.exe -ExecutionPolicy Bypass -Command "Invoke-Item 'C:\\Users\\weber\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Launch Stream Software.lnk'"
+
 .EXAMPLE
   None
 #>
 Import-Module AudioDeviceCmdlets
-
+read-host "wait 1second"
 #Set Error Action to Silently Continue
 $ErrorActionPreference = "SilentlyContinue"
 
@@ -63,35 +70,51 @@ $ErrorActionPreference = "SilentlyContinue"
 # $articsGame = Get-AudioDevice -List | Where-Object -Property Name -eq "Headphones (Arctis Pro Wireless Game)"
 # Set-AudioDevice -ID $articsGame.ID
 
+# Run the Restart Audio Script
+Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\Dropbox\Twitch\\VAC Setup\\restartaudiosetup.ps1"' 
+
+# Read-Host "waiiiit!!!!"
 
 # Stop list of programs that cause issues
 # This should hopefully stop the processes gracefully
-if(Get-Process -Name 'dropbox'){
-  Get-Process -Name 'dropbox' | Stop-Process
+# List of processes to kill
+$processes = "dropbox|googledrivesync|VirtuaWin"
+if(Get-Process -Name $processes){
+  Get-Process -Name $processes | Stop-Process
 }
 else{
-  Write-Output "Dropbox Not running!"
-}
-if(Get-Process -Name 'googledrivesync'){
-  Get-Process -Name 'googledrivesync' | Stop-Process
-}
-else{
-  Write-Output "Google Drive Not running!"
+  Write-Output "$processes Not running!"
 }
 
-<# if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Running"}){
-  Get-Service -Name 'synergy' | Stop-Service
-}
-else{
-  Write-Output "Synergy Not running!"
-} #>
+# if(Get-Process -Name 'dropbox'){
+#   Get-Process -Name 'dropbox' | Stop-Process
+# }
+# else{
+#   Write-Output "Dropbox Not running!"
+# }
+# if(Get-Process -Name 'googledrivesync'){
+#   Get-Process -Name 'googledrivesync' | Stop-Process
+# }
+# else{
+#   Write-Output "Google Drive Not running!"
+# }
+# if(Get-Process -Name 'VirtuaWin'){
+#   Stop-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
+# }
+# else{
+#   Write-Output "VirtuaWin Not running!"
+# }
 
-if(Get-Process -Name 'VirtuaWin'){
-  Stop-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
-}
-else{
-  Write-Output "VirtuaWin Not running!"
-}
+
+# Stop Services
+# Services require Admin elevation split out and run as separate script?
+# $services = "Synergy|TeamViewer|DbxSvc"
+# if(Get-Service -Name $services | Where-Object {$_.Status -eq "Running"}){
+#   Get-Service -Name $services | Stop-Service
+# }
+# else{
+#   Write-Output "$services Not running!"
+# }
 
 
 # Set powerplan to High Performance Plan while streaming if not already
@@ -135,7 +158,7 @@ else{
 
 # Check then Launch Chatbot
 if(!(Get-Process -Name 'Streamlabs*Chatbot*')){
-  Start-Process -FilePath "$env:APPDATA\Streamlabs\Streamlabs Chatbot\Streamlabs Chatbot.exe" -WorkingDirectory "$env:APPDATA\Streamlabs\Streamlabs Chatbot" -Verb runAs
+  Start-Process -FilePath "$env:APPDATA\Streamlabs\Streamlabs Chatbot\Streamlabs Chatbot.exe" -WorkingDirectory "$env:APPDATA\Streamlabs\Streamlabs Chatbot" 
   if(Get-Process -Name 'Streamlabs Chatbot'){
   Write-Output "StreamLabs Chatbot Started!"}
 }
@@ -171,7 +194,7 @@ else{
 
 # Check for and then launch OBS
 if(!(Get-Process -Name 'obs*')){
-  Start-Process -FilePath "C:\Program Files\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files\obs-studio\bin\64bit" -Verb runAs
+  Start-Process -FilePath "C:\Program Files\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files\obs-studio\bin\64bit" 
   if(Get-Process -Name 'obs64'){
   Write-Output "OBS Started"}
 }
@@ -189,23 +212,38 @@ do{
   # If the check programs are still running 
   # sleep for 2 minutes
   Write-Output " Waiting for streaming software to close.
-  `n Sleeping for 2 minutes.
   `n Before relaunching closed programs.
   `n Sleep will repeat until programs close."
-  Start-Sleep -seconds 120
+  
+  $sleepTime = 120
 
   # Determine if processes are running and add them to count
   # So we can determine if we want to continue to wait
-  if(Get-Process -Name 'obs64'){
-      $running += (Get-Process -Name 'obs64').length
+  $processCheckToEnd = 'obs64','HexChat','streamlab*'
+  foreach ($item in $processCheckToEnd) {
+    if(Get-Process -Name $item){
+      $running += (Get-Process -Name $item).length
+      # Write-Output $item
+      $sleepTime += 60
+    }
   }
-  if(Get-Process -Name 'HexChat'){
-      $running += (Get-Process -Name 'HexChat').length
+  if ($running -eq 0) {
+    $sleepTime = 30
   }
-  if(Get-Process -Name 'streamlab*'){
-      $running += (Get-Process -Name 'streamlab*').length
-  }
-  Write-OutPut " Number of running programs: $running"
+
+  # if(Get-Process -Name 'obs64'){
+  #     $running += (Get-Process -Name 'obs64').length
+  # }
+  # if(Get-Process -Name 'HexChat'){
+  #     $running += (Get-Process -Name 'HexChat').length
+  # }
+  # if(Get-Process -Name 'streamlab*'){
+  #     $running += (Get-Process -Name 'streamlab*').length
+  # }
+  $minutes = $sleepTime / 60
+  Write-OutPut " Number of running programs: $running , Sleeping for $minutes minutes."
+  
+  Start-Sleep -seconds $sleepTime
 }while($running -gt 0)
 
 # Created the daily as a clone of my balance performance settings
@@ -218,7 +256,7 @@ Try {
   $CurrPlan = $(powercfg -getactivescheme).split()[3]
   if ($CurrPlan -ne $BalancePerf) {powercfg -setactive $BalancePerf}
 } Catch {
-  Write-Warning -Message "Unable to set power plan to Daily Performance"
+  Write-Warning -Message "Unable to set power plan to Balanced Performance"
 }
 
 # Relaunch killed process from above if not already running
@@ -230,12 +268,11 @@ if(!(Get-Process -Name 'googledrivesync')){
   Start-Process -FilePath "C:\Program Files\Google\Drive\googledrivesync.exe" -WorkingDirectory "C:\Program Files\Google\Drive\"
 }
 
-<# if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Stopped"}){
-  Start-Service -Name 'synergy'
-} #>
+# Services require admin rights to start / stop
+# if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Stopped"}){
+#   Start-Service -Name 'synergy' 
+# }
 
 if(!(Get-Process -Name 'VirtuaWin')){
   Start-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
 }
-
-VirtuaWin
