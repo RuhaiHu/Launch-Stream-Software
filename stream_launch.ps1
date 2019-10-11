@@ -55,8 +55,7 @@
 
    FOR STREAM DECK
     powershell.exe -WindowStyle Minimized -ExecutionPolicy Bypass -Command "Invoke-Item 'C:\\Users\\weber\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Launch Stream Software.lnk'" 
-
-
+    
 .EXAMPLE
   None
 #>
@@ -76,7 +75,7 @@ Set-AudioDevice -RecordingMute 0
 # Stop list of programs that cause issues
 # This should hopefully stop the processes gracefully
 # List of processes to kill
-$processes = 'dropbox', 'googledrivesync', 'VirtuaWin'
+$processes = 'dropbox', 'googledrivesync', 'VirtuaWin', 'TeamViewe*'
 if(Get-Process -Name $processes){
   Get-Process -Name $processes | Stop-Process
 }
@@ -84,16 +83,8 @@ else{
   Write-Output "$processes Not running!"
 }
 
-# Stop Services
-# Services require Admin elevation split out and run as separate script?
-# $services = "Synergy|TeamViewer|DbxSvc"
-# if(Get-Service -Name $services | Where-Object {$_.Status -eq "Running"}){
-#   Get-Service -Name $services | Stop-Service
-# }
-# else{
-#   Write-Output "$services Not running!"
-# }
-
+# Run the Stop services script
+Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\\Google Drive\\Twitch\Scripts\Launch-Stream-Software\\stream_StopServices.ps1"' -Verb RunAs
 
 # Set powerplan to High Performance Plan while streaming if not already
 # Found on https://facility9.com/2015/07/controlling-the-windows-power-plan-with-powershell/
@@ -230,20 +221,21 @@ Try {
   Write-Warning -Message "Unable to set power plan to Balanced Performance"
 }
 
+# Run the Start services script
+Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\\Google Drive\\Twitch\Scripts\Launch-Stream-Software\\stream_StartServices.ps1"' -Verb RunAs
+
 # Relaunch killed process from above if not already running
 if(!(Get-Process -Name 'dropbox')){
   Start-Process -FilePath "C:\Program Files (x86)\Dropbox\Client\Dropbox.exe" -WorkingDirectory "C:\Program Files (x86)\Dropbox\Client"
 }
-
 if(!(Get-Process -Name 'googledrivesync')){
   Start-Process -FilePath "C:\Program Files\Google\Drive\googledrivesync.exe" -WorkingDirectory "C:\Program Files\Google\Drive\"
 }
-
-# Services require admin rights to start / stop
-# if(Get-Service -Name 'synergy' | Where-Object {$_.Status -eq "Stopped"}){
-#   Start-Service -Name 'synergy' 
-# }
-
 if(!(Get-Process -Name 'VirtuaWin')){
   Start-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
 }
+if(!(Get-Process -Name 'TeamViewe*')){
+  Start-Process -FilePath "C:\Program Files (x86)\TeamViewer\TeamViewer.exe" -WorkingDirectory "C:\Program Files (x86)\TeamViewer\"
+}
+
+
