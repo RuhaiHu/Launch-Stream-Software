@@ -139,18 +139,6 @@ else{
 
 # Check then Launch Pretzel
 if(!(Get-Process -Name 'pretzel')){
-  # Seems Pretzel also outputs some extra stuff that I don't want to see on the output
-
-  # "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" >$null
-
-  # $pretzel = $env:LOCALAPPDATA + "\Programs\PretzelDesktop\Pretzel.exe"
-  # $pretzelWorkingDirectory = $env:LOCALAPPDATA + "\Programs\PretzelDesktop"
-  
-  
-  #   Start-Process -FilePath $pretzel -WorkingDirectory $pretzelWorkingDirectory *>$nul
-  # Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList "C:\Users\weber\AppData\Local\Programs\PretzelDesktop\Pretzel.exe" *>$null
-
-
   Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" | Out-Null
   if(Get-Process -Name 'pretzel'){
   Write-Output "Pretzel Started"}
