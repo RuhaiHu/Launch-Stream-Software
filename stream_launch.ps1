@@ -90,26 +90,6 @@ else{
   Write-Output "$processes Not running!"
 }
 
-# if(Get-Process -Name 'dropbox'){
-#   Get-Process -Name 'dropbox' | Stop-Process
-# }
-# else{
-#   Write-Output "Dropbox Not running!"
-# }
-# if(Get-Process -Name 'googledrivesync'){
-#   Get-Process -Name 'googledrivesync' | Stop-Process
-# }
-# else{
-#   Write-Output "Google Drive Not running!"
-# }
-# if(Get-Process -Name 'VirtuaWin'){
-#   Stop-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
-# }
-# else{
-#   Write-Output "VirtuaWin Not running!"
-# }
-
-
 # Stop Services
 # Services require Admin elevation split out and run as separate script?
 # $services = "Synergy|TeamViewer|DbxSvc"
@@ -237,15 +217,6 @@ do{
     $sleepTime = 30
   }
 
-  # if(Get-Process -Name 'obs64'){
-  #     $running += (Get-Process -Name 'obs64').length
-  # }
-  # if(Get-Process -Name 'HexChat'){
-  #     $running += (Get-Process -Name 'HexChat').length
-  # }
-  # if(Get-Process -Name 'streamlab*'){
-  #     $running += (Get-Process -Name 'streamlab*').length
-  # }
   $minutes = $sleepTime / 60
   Write-OutPut " Number of running programs: $running , Sleeping for $minutes minutes."
   
