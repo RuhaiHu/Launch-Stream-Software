@@ -35,7 +35,7 @@
   Creation Date:  2018.09.06
 
   Last Modified by: Ruhai Hu
-  Last Modifcation Date: 2019.10.10
+  Last Modifcation Date: 2019.10.11
 
   Purpose/Change: 
     Initial script development
@@ -62,20 +62,14 @@
 #>
 Import-Module AudioDeviceCmdlets
 
-
-# read-host "wait 1second"
-
-
 #Set Error Action to Silently Continue
 $ErrorActionPreference = "SilentlyContinue"
 
-# Write-Output "Setting Wireless Headphones as Default Audio Device"
-
-# $articsGame = Get-AudioDevice -List | Where-Object -Property Name -eq "Headphones (Arctis Pro Wireless Game)"
-# Set-AudioDevice -ID $articsGame.ID
-
 # Run the Restart Audio Script
 Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\Dropbox\Twitch\\VAC Setup\\restartaudiosetup.ps1"' -Verb RunAs
+
+# Set Default Recording device to not muted
+Set-AudioDevice -RecordingMute 0
 
 # Read-Host "waiiiit!!!!"
 
