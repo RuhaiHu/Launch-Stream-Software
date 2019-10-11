@@ -174,7 +174,7 @@ do{
   `n Before relaunching closed programs.
   `n Sleep will repeat until programs close."
   
-  $sleepTime = 120
+  $sleepTime = 60
 
   # Determine if processes are running and add them to count
   # So we can determine if we want to continue to wait
