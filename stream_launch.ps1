@@ -264,7 +264,7 @@ if(!(Get-Process -Name 'TeamViewe*')){
 }
 
 # Run the Restart Audio Script
-Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\GD\twitch\VAC Setup\restartaudiosetup.ps1"' -Verb RunAs
+Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\GD\Twitch\VAC Setup\RestartBasicAudio.ps1"' -Verb RunAs
 
 # Set Default Recording device to muted
 Write-Output "Muting microphone"
