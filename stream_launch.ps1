@@ -30,12 +30,12 @@
   None
 
 .NOTES
-  Version:        1.5
+  Version:        1.6
   Author:         Ruhai Hu
   Creation Date:  2018.09.06
 
   Last Modified by: Ruhai Hu
-  Last Modifcation Date: 2019.10.11
+  Last Modifcation Date: 2020.02.04
 
   Purpose/Change: 
     Initial script development
@@ -141,7 +141,7 @@ else{
 # Check then Launch Stream Labels
 if(!(Get-Process -Name 'streamlabels')){
   # Annoyingly Stream Labs Labels outputs a bunch of connection information so sending it to $null
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels" | Out-Null
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels"
   if(Get-Process -Name 'streamlabels'){
   Write-Output "StreamLabels Started!"}
 }
@@ -163,13 +163,25 @@ else{
 #   Write-Error "StreamLabs Chatbot Failed to Start!"
 # }
 
+# Check then Launch Pretzel OLD
+# if(!(Get-Process -Name 'pretzel')){
+#   Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" | Out-Null
+#   if(Get-Process -Name 'pretzel'){
+#   Write-Output "Pretzel Started"}
+# }
+# elseif(Get-Process -Name 'pretzel'){
+#   Write-Output "Pretzel already running!"}
+# else{
+#   Write-Error "Pretzel Failed to Start!"
+# }
+
 # Check then Launch Pretzel
-if(!(Get-Process -Name 'pretzel')){
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" | Out-Null
-  if(Get-Process -Name 'pretzel'){
+if(!(Get-Process -Name 'Pretzel-Beta')){
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\@pretzel-auxpretzel-desktop\Pretzel-Beta.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\@pretzel-auxpretzel-desktop" | Out-Null
+  if(Get-Process -Name 'Pretzel-Beta'){
   Write-Output "Pretzel Started"}
 }
-elseif(Get-Process -Name 'pretzel'){
+elseif(Get-Process -Name 'Pretzel-Beta'){
   Write-Output "Pretzel already running!"}
 else{
   Write-Error "Pretzel Failed to Start!"
