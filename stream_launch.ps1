@@ -163,25 +163,14 @@ else{
 #   Write-Error "StreamLabs Chatbot Failed to Start!"
 # }
 
-# Check then Launch Pretzel OLD
-# if(!(Get-Process -Name 'pretzel')){
-#   Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" | Out-Null
-#   if(Get-Process -Name 'pretzel'){
-#   Write-Output "Pretzel Started"}
-# }
-# elseif(Get-Process -Name 'pretzel'){
-#   Write-Output "Pretzel already running!"}
-# else{
-#   Write-Error "Pretzel Failed to Start!"
-# }
 
 # Check then Launch Pretzel
-if(!(Get-Process -Name 'Pretzel-Beta')){
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\@pretzel-auxpretzel-desktop\Pretzel-Beta.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\@pretzel-auxpretzel-desktop" | Out-Null
-  if(Get-Process -Name 'Pretzel-Beta'){
+if(!(Get-Process -Name 'Pretzel')){
+  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" | Out-Null
+  if(Get-Process -Name 'Pretzel'){
   Write-Output "Pretzel Started"}
 }
-elseif(Get-Process -Name 'Pretzel-Beta'){
+elseif(Get-Process -Name 'Pretzel'){
   Write-Output "Pretzel already running!"}
 else{
   Write-Error "Pretzel Failed to Start!"
