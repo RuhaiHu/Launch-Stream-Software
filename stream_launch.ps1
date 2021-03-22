@@ -66,7 +66,11 @@ Import-Module AudioDeviceCmdlets
 $ErrorActionPreference = "SilentlyContinue"
 
 # Variables
+# launching pretzel and streamlabels this way because otherwise they are annoying and spam stuff to console
 $shortCutPretzel = "/c Start """" ""C:\Users\Ruhai Hu\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Pretzel.lnk""  && exit"
+$shortCutStreamLabels = "/c Start """" ""C:\Users\Ruhai Hu\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\StreamLabels.lnk""  && exit"
+# Powersplan codes
+# in a console type powercfg /list to get alist of plans and their assocated code copy the code
 $powerBalanced = "381b4222-f694-41f0-9685-ff5bb260df2e"
 $powerHighPerf = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
 
@@ -147,7 +151,8 @@ if($CurrPlan -ne $powerHighPerf){
 # Check then Launch Stream Labels
 if(!(Get-Process -Name 'streamlabels')){
   # Annoyingly Stream Labs Labels outputs a bunch of connection information so sending it to $null
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels"
+  # Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels"
+  Start-Process -FilePath CMD.exe -ArgumentList $shortCutStreamLabels -WindowStyle Hidden
   if(Get-Process -Name 'streamlabels'){
   Write-Output "StreamLabels Started!"}
 }
@@ -171,7 +176,8 @@ else{
 
 # Check then Launch Pretzel
 if(!(Get-Process -Name 'Pretzel')){
-  Start-Process -FilePath CMD.exe -ArgumentList $shortCutPretzel
+  # Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" -PassThru
+  Start-Process -FilePath CMD.exe -ArgumentList $shortCutPretzel -WindowStyle Hidden
   if(Get-Process -Name 'Pretzel'){
   Write-Output "Pretzel Started"}
 }
