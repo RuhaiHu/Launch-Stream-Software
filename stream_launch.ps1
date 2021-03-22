@@ -33,6 +33,7 @@
   Version:        1.6
   Author:         Ruhai Hu
   Creation Date:  2018.09.06
+  Last Modified: 2021.03.21
 
   Last Modified by: Ruhai Hu
   Last Modifcation Date: 2020.02.04
@@ -64,6 +65,11 @@ Import-Module AudioDeviceCmdlets
 #Set Error Action to Silently Continue
 $ErrorActionPreference = "SilentlyContinue"
 
+# Variables
+$shortCutPretzel = "/c Start """" ""C:\Users\Ruhai Hu\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Pretzel.lnk""  && exit"
+$powerBalanced = "381b4222-f694-41f0-9685-ff5bb260df2e"
+$powerHighPerf = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
+
 # Run the Restart Audio Script
 Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\GD\twitch\VAC Setup\RestartStreamAudio.ps1"' -Verb RunAs
 
@@ -89,30 +95,30 @@ Write-Output "Stopping Services"
 Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "$PSScriptRoot\stream_StopServices.ps1"' -Verb RunAs
 
 # Set powerplan to High Performance Plan while streaming if not already
-# Found on https://facility9.com/2015/07/controlling-the-windows-power-plan-with-powershell/
-# Also found on other sites
-Try {
-  $HighPerf = powercfg -l | %{if($_.contains("High performance")) {$_.split()[3]}}
-  $CurrPlan = $(powercfg -getactivescheme).split()[3]
-  if ($CurrPlan -ne $HighPerf) {powercfg -setactive $HighPerf}
-} Catch {
-  Write-Warning -Message "Unable to set power plan to high performance"
+
+# Get the current active power plan
+$CurrPlan = $(powercfg -getactivescheme).split()[3]
+if($CurrPlan -ne $powerHighPerf){
+  Write-Output "PowerPlan not high setting to high"
+  powercfg.exe /SetActive $powerHighPerf
+}else {
+  Write-out "Already on High Pref!"
 }
 
 # Launch programs below with as variables
 # Also check to see if they are already running
 
 # Check then Launch Hexchat
-if(!(Get-Process -Name 'hexchat')){
-  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat" | Out-Null
-  if(Get-Process -Name 'hexchat'){
-  Write-Output "HexChat Started!"}
-}
-elseif(Get-Process -Name 'hexchat'){
-  Write-Output "HexChat already running!"}
-else{
-  Write-Error "Hexchat Failed to Start!"
-}
+# if(!(Get-Process -Name 'hexchat')){
+#   Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat" | Out-Null
+#   if(Get-Process -Name 'hexchat'){
+#   Write-Output "HexChat Started!"}
+# }
+# elseif(Get-Process -Name 'hexchat'){
+#   Write-Output "HexChat already running!"}
+# else{
+#   Write-Error "Hexchat Failed to Start!"
+# }
 
 # Check then Launch voicemeeterpro Banana
 # if(!(Get-Process -Name 'voicemeeterpro')){
@@ -163,10 +169,9 @@ else{
 #   Write-Error "StreamLabs Chatbot Failed to Start!"
 # }
 
-
 # Check then Launch Pretzel
 if(!(Get-Process -Name 'Pretzel')){
-  Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" | Out-Null
+  Start-Process -FilePath CMD.exe -ArgumentList $shortCutPretzel
   if(Get-Process -Name 'Pretzel'){
   Write-Output "Pretzel Started"}
 }
@@ -204,8 +209,9 @@ do{
   $sleepTime = 10
 
   # Determine if processes are running and add them to count
-  # So we can determine if we want to continue to wait
-  $processCheckToEnd = 'obs64','HexChat','streamlab*'
+  # So we can determine if we want to continue to wait 
+  # 'HexChat'
+  $processCheckToEnd = 'obs64','streamlab*'
   foreach ($item in $processCheckToEnd) {
     if(Get-Process -Name $item){
       $running += (Get-Process -Name $item).length
@@ -223,17 +229,14 @@ do{
   Start-Sleep -seconds $sleepTime
 }while($running -gt 0)
 
-# Created the daily as a clone of my balance performance settings
-# Because I couldn't get it to recognize just the balance plan
-# Set power plan back to balanced/daily regular usage plan
-# Found on https://facility9.com/2015/07/controlling-the-windows-power-plan-with-powershell/
-# Also found on other sites
-Try {
-  $BalancePerf = powercfg -l | %{if($_.contains("Balanced")) {$_.split()[3]}}
-  $CurrPlan = $(powercfg -getactivescheme).split()[3]
-  if ($CurrPlan -ne $BalancePerf) {powercfg -setactive $BalancePerf}
-} Catch {
-  Write-Warning -Message "Unable to set power plan to Balanced Performance"
+# Set powerplan back to balanced
+# Get current power plan again
+$CurrPlan = $(powercfg -getactivescheme).split()[3]
+if($CurrPlan -ne $powerBalanced){
+  Write-Output "PowerPlan not Balanced setting to balanced"
+  powercfg.exe /SetActive $powerBalanced
+}else {
+  Write-out "Already on Balanced!"
 }
 
 # Stop some started programs
