@@ -86,7 +86,13 @@ Set-AudioDevice -RecordingMute 0
 # Stop list of programs that cause issues
 # This should hopefully stop the processes gracefully
 # List of processes to kill
-$processes = 'dropbox', 'googledrivesync', 'VirtuaWin', 'TeamViewe*'
+
+# Get GoogleDriveFS path before killing
+# this will return multiple so only [0] first will be used
+$googleDrivePath = Get-Process -Name 'GoogleDriveFS' | Select-Object -ExpandProperty Path
+
+# $processes = 'dropbox', 'GoogleDriveFS', 'VirtuaWin', 'TeamViewe*'
+$processes = 'GoogleDriveFS', 'VirtuaWin', 'TeamViewe*'
 if(Get-Process -Name $processes){
   Get-Process -Name $processes | Stop-Process
 }
@@ -260,11 +266,12 @@ Write-Output "Re-Starting Services"
 Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "$PSScriptRoot\stream_StartServices.ps1"' -Verb RunAs
 
 # Relaunch killed process from above if not already running
-if(!(Get-Process -Name 'dropbox')){
-  Start-Process -FilePath "C:\Program Files (x86)\Dropbox\Client\Dropbox.exe" -WorkingDirectory "C:\Program Files (x86)\Dropbox\Client"
-}
-if(!(Get-Process -Name 'googledrivesync')){
-  Start-Process -FilePath "C:\Program Files\Google\Drive\googledrivesync.exe" -WorkingDirectory "C:\Program Files\Google\Drive\"
+# if(!(Get-Process -Name 'dropbox')){
+#   Start-Process -FilePath "C:\Program Files (x86)\Dropbox\Client\Dropbox.exe" -WorkingDirectory "C:\Program Files (x86)\Dropbox\Client"
+# }
+
+if(!(Get-Process -Name 'GoogleDriveFS')){
+  Start-Process -FilePath $googleDrivePath[0]
 }
 if(!(Get-Process -Name 'VirtuaWin')){
   Start-ScheduledTask -TaskPath "\Mine" -TaskName "VirtualWin"
