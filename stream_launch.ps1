@@ -13,6 +13,7 @@
     StreamLabels
     StreamLabsChat
     HexChat
+    Chatty
     Pretzel
     OBS
   After Software is closed manually
@@ -60,7 +61,7 @@
 .EXAMPLE
   None
 #>
-Import-Module AudioDeviceCmdlets
+# Import-Module AudioDeviceCmdlets
 
 #Set Error Action to Silently Continue
 $ErrorActionPreference = "SilentlyContinue"
@@ -68,7 +69,7 @@ $ErrorActionPreference = "SilentlyContinue"
 # Variables
 # launching pretzel and streamlabels this way because otherwise they are annoying and spam stuff to console
 $shortCutPretzel = "/c Start """" ""C:\Users\Ruhai Hu\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Pretzel.lnk""  && exit"
-$shortCutStreamLabels = "/c Start """" ""C:\Users\Ruhai Hu\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\StreamLabels.lnk""  && exit"
+# $shortCutStreamLabels = "/c Start """" ""C:\Users\Ruhai Hu\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\StreamLabels.lnk""  && exit"
 # Powersplan codes
 # in a console type powercfg /list to get alist of plans and their assocated code copy the code
 $powerBalanced = "381b4222-f694-41f0-9685-ff5bb260df2e"
@@ -118,17 +119,29 @@ if($CurrPlan -ne $powerHighPerf){
 # Launch programs below with as variables
 # Also check to see if they are already running
 
-# Check then Launch Hexchat
-# if(!(Get-Process -Name 'hexchat')){
-#   Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat" | Out-Null
-#   if(Get-Process -Name 'hexchat'){
-#   Write-Output "HexChat Started!"}
-# }
-# elseif(Get-Process -Name 'hexchat'){
-#   Write-Output "HexChat already running!"}
-# else{
-#   Write-Error "Hexchat Failed to Start!"
-# }
+Check then Launch Hexchat
+if(!(Get-Process -Name 'hexchat')){
+  Start-Process -FilePath "C:\Program Files\HexChat\hexchat.exe" -WorkingDirectory "C:\Program Files\HexChat" | Out-Null
+  if(Get-Process -Name 'hexchat'){
+  Write-Output "HexChat Started!"}
+}
+elseif(Get-Process -Name 'hexchat'){
+  Write-Output "HexChat already running!"}
+else{
+  Write-Error "Hexchat Failed to Start!"
+}
+
+Check then Launch Chatty
+if(!(Get-Process -Name 'chatty')){
+  Start-Process -FilePath "C:\Program Files (x86)\Chatty\Chatty.exe" -WorkingDirectory "C:\Program Files (x86)\Chatty" | Out-Null
+  if(Get-Process -Name 'hexchat'){
+  Write-Output "HexChat Started!"}
+}
+elseif(Get-Process -Name 'chatty'){
+  Write-Output "Chatty already running!"}
+else{
+  Write-Error "Chatty Failed to Start!"
+}
 
 # Check then Launch voicemeeterpro Banana
 # if(!(Get-Process -Name 'voicemeeterpro')){
@@ -154,32 +167,6 @@ if($CurrPlan -ne $powerHighPerf){
 #   Write-Error "Cantabile Failed to Start!"
 # }
 
-# Check then Launch Stream Labels
-if(!(Get-Process -Name 'streamlabels')){
-  # Annoyingly Stream Labs Labels outputs a bunch of connection information so sending it to $null
-  # Start-Process -FilePath "$env:LOCALAPPDATA\Programs\streamlabels\StreamLabels.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\streamlabels"
-  Start-Process -FilePath CMD.exe -ArgumentList $shortCutStreamLabels -WindowStyle Hidden
-  if(Get-Process -Name 'streamlabels'){
-  Write-Output "StreamLabels Started!"}
-}
-elseif(Get-Process -Name 'streamlabels'){
-  Write-Output "StreamLabels already running!"}
-else{
-  Write-Error "StreamLabels Failed to Start!"
-}
-
-# Check then Launch Chatbot
-# if(!(Get-Process -Name 'Streamlabs*Chatbot*')){
-#   Start-Process -FilePath "$env:APPDATA\Streamlabs\Streamlabs Chatbot\Streamlabs Chatbot.exe" -WorkingDirectory "$env:APPDATA\Streamlabs\Streamlabs Chatbot" -Verb RunAs
-#   if(Get-Process -Name 'Streamlabs Chatbot'){
-#   Write-Output "StreamLabs Chatbot Started!"}
-# }
-# elseif(Get-Process -Name 'Streamlabs Chatbot'){
-#   Write-Output "StreamLabs Chatbot already running!"}
-# else{
-#   Write-Error "StreamLabs Chatbot Failed to Start!"
-# }
-
 # Check then Launch Pretzel
 if(!(Get-Process -Name 'Pretzel')){
   # Start-Process -FilePath "$env:LOCALAPPDATA\Programs\PretzelDesktop\Pretzel.exe" -WorkingDirectory "$env:LOCALAPPDATA\Programs\PretzelDesktop" -PassThru
@@ -194,7 +181,7 @@ else{
 }
 
 # Check for and then launch OBS
-if(!(Get-Process -Name 'obs*')){
+if(!(Get-Process -Name 'obs64')){
   Start-Process -FilePath "C:\Program Files\obs-studio\bin\64bit\obs64.exe" -WorkingDirectory "C:\Program Files\obs-studio\bin\64bit" -Verb RunAs
   if(Get-Process -Name 'obs64'){
   Write-Output "OBS Started"}
@@ -223,7 +210,7 @@ do{
   # Determine if processes are running and add them to count
   # So we can determine if we want to continue to wait 
   # 'HexChat'
-  $processCheckToEnd = 'obs64','streamlab*'
+  $processCheckToEnd = 'obs64','pretzel'
   foreach ($item in $processCheckToEnd) {
     if(Get-Process -Name $item){
       $running += (Get-Process -Name $item).length
@@ -284,5 +271,5 @@ if(!(Get-Process -Name 'TeamViewe*')){
 Start-Process -FilePath 'powershell.exe' -ArgumentList '-ExecutionPolicy Bypass -File "D:\GD\Twitch\VAC Setup\RestartBasicAudio.ps1"' -Verb RunAs
 
 # Set Default Recording device to muted
-Write-Output "Muting microphone"
-Set-AudioDevice -RecordingMute 1
+# Write-Output "Muting microphone"
+# Set-AudioDevice -RecordingMute 1
